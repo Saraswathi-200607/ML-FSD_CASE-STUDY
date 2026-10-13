@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block title %}Delete account{% endblock %}
+{% block content %}
+<div class="card border-danger mx-auto" style="max-width:34rem"><div class="card-body">
+  <h1 class="h4 text-danger">Delete your account?</h1>
+  <p>This permanently deletes your account and <strong>all</strong> saved health assessments. It cannot be undone.</p>
+  <form method="post">{% csrf_token %}
+    <button class="btn btn-danger" type="submit">Yes, delete everything</button>
+    <a class="btn btn-secondary" href="{% url 'accounts:profile' %}">Cancel</a>
+  </form>
+</div></div>
+{% endblock %}

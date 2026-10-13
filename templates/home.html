@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+  <h1 class="display-6 fw-bold">Personalized Disease Risk &amp; Lifestyle Recommendations</h1>
+  <p class="lead">Answer a few health and lifestyle questions. A machine-learning model trained on a public
+     US survey dataset compares your answers with patterns in that data, and a transparent rule-based
+     engine suggests general lifestyle tips.</p>
+  {% if user.is_authenticated %}
+    <a class="btn btn-primary btn-lg" href="{% url 'health:new' %}">Start an assessment</a>
+  {% else %}
+    <a class="btn btn-primary btn-lg me-2" href="{% url 'accounts:register' %}">Create an account</a>
+    <a class="btn btn-outline-primary btn-lg" href="{% url 'accounts:login' %}">Log in</a>
+  {% endif %}
+</div>
+<div class="row g-3">
+  <div class="col-md-4"><div class="card h-100"><div class="card-body">
+    <h2 class="h5">Heart-disease pattern check</h2>
+    <p class="mb-0">The model estimates how closely your answers resemble people who reported heart disease in its training data.</p></div></div></div>
+  <div class="col-md-4"><div class="card h-100"><div class="card-body">
+    <h2 class="h5">Explained recommendations</h2>
+    <p class="mb-0">Every tip comes with the reason it was given. No medicines, no diagnoses, no promises.</p></div></div></div>
+  <div class="col-md-4"><div class="card h-100"><div class="card-body">
+    <h2 class="h5">Private by design</h2>
+    <p class="mb-0">Only you can see your records, and you can delete them at any time. Nothing is sent to external AI services.</p></div></div></div>
+</div>
+<div class="alert alert-warning mt-4" role="note">
+  <strong>Important:</strong> the model was trained on US survey data and has not been validated for people in India
+  or for clinical use. Treat results as educational only.
+</div>
+{% endblock %}

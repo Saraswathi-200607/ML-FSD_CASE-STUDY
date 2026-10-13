@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block title %}Delete assessment{% endblock %}
+{% block content %}
+<div class="card border-danger mx-auto" style="max-width:34rem"><div class="card-body">
+  <h1 class="h4 text-danger">Delete this assessment?</h1>
+  <p>The assessment of {{ a.created_at|date:"d M Y, H:i" }} will be permanently deleted.</p>
+  <form method="post">{% csrf_token %}
+    <button class="btn btn-danger" type="submit">Delete</button>
+    <a class="btn btn-secondary" href="{% url 'health:detail' a.pk %}">Cancel</a>
+  </form>
+</div></div>
+{% endblock %}

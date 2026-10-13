@@ -1,0 +1,28 @@
+# Python
+venv/
+.venv/
+venv311/
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+
+# Database / generated
+db.sqlite3
+staticfiles/
+
+# Datasets: do NOT commit health data (large + licensing)
+data/*
+!data/.gitkeep
+
+# Model artifacts are ignored by default. For deployment on Render without a
+# persistent disk, force-add the small final model:  git add -f model_artifacts/model.joblib model_artifacts/model_meta.json
+model_artifacts/*
+!model_artifacts/.gitkeep
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+inspection_output.txt

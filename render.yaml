@@ -1,0 +1,24 @@
+# Optional "Blueprint": Render -> New -> Blueprint, point it at your repo.
+services:
+  - type: web
+    name: disease-risk-system
+    runtime: python
+    plan: free
+    buildCommand: "bash build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.3
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: disease-risk-db
+          property: connectionString
+
+databases:
+  - name: disease-risk-db
+    plan: free

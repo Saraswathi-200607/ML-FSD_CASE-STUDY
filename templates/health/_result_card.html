@@ -1,0 +1,19 @@
+{# expects: a (Assessment) #}
+<div class="card shadow-sm h-100 border-{% if a.risk_category == 'elevated' %}danger{% elif a.risk_category == 'borderline' %}warning{% else %}success{% endif %}">
+  <div class="card-body">
+    <h2 class="h5">Model result</h2>
+    <p class="display-6 mb-1">
+      <span class="badge text-bg-{% if a.risk_category == 'elevated' %}danger{% elif a.risk_category == 'borderline' %}warning{% else %}success{% endif %}">
+        {{ a.get_risk_category_display }} pattern</span>
+    </p>
+    <p class="mb-2">
+      {% if a.risk_category == 'elevated' %}Your answers resemble those of people who reported heart disease more than most of the training data does.
+      {% elif a.risk_category == 'borderline' %}Your answers partly resemble those of people who reported heart disease.
+      {% else %}Your answers resemble those of people who reported heart disease less than most of the training data does.{% endif %}
+    </p>
+    <p class="small text-muted mb-0">
+      Model score: {{ a.model_score|floatformat:3 }} (an uncalibrated score, <strong>not</strong> a percentage chance).
+      Model version: {{ a.model_version }}.
+    </p>
+  </div>
+</div>

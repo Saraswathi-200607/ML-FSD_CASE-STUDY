@@ -1,0 +1,12 @@
+{# expects: recs (list of dicts) #}
+<div class="row g-3">
+{% for r in recs %}
+  <div class="col-md-6"><div class="card h-100 rec-{{ r.priority }}">
+    <div class="card-body">
+      <span class="badge text-bg-{% if r.priority == 'high' %}danger{% elif r.priority == 'medium' %}warning{% else %}secondary{% endif %} mb-2">{{ r.category }}</span>
+      <h3 class="h6">{{ r.title }}</h3>
+      <p class="mb-2">{{ r.advice }}</p>
+      <p class="small text-muted mb-0"><strong>Why:</strong> {{ r.reason }}</p>
+    </div></div></div>
+{% empty %}<p>No recommendations.</p>{% endfor %}
+</div>

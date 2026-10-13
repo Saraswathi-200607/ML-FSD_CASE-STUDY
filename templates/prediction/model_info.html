@@ -1,0 +1,43 @@
+{% extends "base.html" %}{% block title %}About the model{% endblock %}
+{% block content %}
+<h1 class="h3">About the prediction model</h1>
+{% if error %}
+<div class="alert alert-danger" role="alert"><strong>Setup problem:</strong> {{ error }}</div>
+{% else %}
+<div class="row g-3 mb-3">
+  <div class="col-md-6"><div class="card h-100"><div class="card-body">
+    <h2 class="h5">Selected model</h2>
+    <dl class="mb-0">
+      <dt>Version</dt><dd>{{ meta.model_version }}</dd>
+      <dt>Algorithm</dt><dd>{{ meta.algorithm }}</dd>
+      <dt>Class-imbalance handling</dt><dd>{{ meta.imbalance_strategy }}</dd>
+      <dt>Trained</dt><dd>{{ meta.created_at }}</dd>
+      <dt>Features used ({{ meta.features|length }})</dt><dd class="small">{{ meta.features|join:", " }}</dd>
+    </dl></div></div></div>
+  <div class="col-md-6"><div class="card h-100"><div class="card-body">
+    <h2 class="h5">Held-out test performance</h2>
+    <p class="small text-muted">At the &ldquo;elevated&rdquo; cut-off, which was chosen to catch most positive cases.</p>
+    {% with m=meta.test_metrics_elevated_threshold %}
+    <ul class="mb-0">
+      <li>Recall (sensitivity): {{ m.recall|floatformat:3 }}</li>
+      <li>Precision: {{ m.precision|floatformat:3 }}</li>
+      <li>F1-score: {{ m.f1|floatformat:3 }}</li>
+      <li>ROC-AUC: {{ m.roc_auc|floatformat:3 }}</li>
+      <li>Accuracy: {{ m.accuracy|floatformat:3 }}</li>
+      <li>False-negative rate: {{ m.false_negative_rate|floatformat:3 }}</li>
+    </ul>{% endwith %}
+  </div></div></div>
+</div>
+{% endif %}
+<div class="card mb-3"><div class="card-body">
+  <h2 class="h5">Limitations (please read)</h2>
+  <ul class="mb-0">
+    <li><strong>Different population.</strong> The training data comes from US adults (CDC BRFSS survey). Diet, genetics, body composition and baseline disease rates differ in India, so the model may be less accurate for Indian users. BMI in particular may understate risk for South Asians.</li>
+    <li><strong>Self-reported, cross-sectional data.</strong> The target is &ldquo;has been told they have heart disease&rdquo;, not &ldquo;will develop it&rdquo;. The result measures <em>similarity to survey reports</em>, not future risk.</li>
+    <li><strong>Missing clinical information.</strong> No blood pressure, cholesterol, family history, or lab values.</li>
+    <li><strong>Not a calibrated probability.</strong> The score is not shown as a percentage because it has not been validated as a real-world personal risk. Class weighting also shifts scores upward.</li>
+    <li><strong>Accuracy alone is misleading</strong> for rare conditions: a model that always says &ldquo;no disease&rdquo; would score high accuracy but miss every patient. That is why recall and the false-negative rate are tracked.</li>
+    <li><strong>Correlation, not causation.</strong> Nothing here shows that changing a habit will change disease risk.</li>
+  </ul>
+</div></div>
+{% endblock %}

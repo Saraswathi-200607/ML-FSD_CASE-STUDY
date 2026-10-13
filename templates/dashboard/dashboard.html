@@ -1,0 +1,54 @@
+{% extends "base.html" %}{% load static %}{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Dashboard</h1>
+  <a class="btn btn-primary" href="{% url 'health:new' %}">New assessment</a>
+</div>
+{% if not latest %}
+<div class="alert alert-info">You have not completed an assessment yet. <a href="{% url 'health:new' %}">Start your first one.</a></div>
+{% else %}
+<div class="row g-3 mb-4">
+  <div class="col-lg-4">{% with a=latest %}{% include "health/_result_card.html" %}{% endwith %}</div>
+  <div class="col-lg-8"><div class="row g-3">
+    <div class="col-6 col-md-3"><div class="card stat"><div class="card-body"><div class="small text-muted">BMI</div><div class="h3 mb-0">{{ latest.bmi }}</div></div></div></div>
+    <div class="col-6 col-md-3"><div class="card stat"><div class="card-body"><div class="small text-muted">Weight</div><div class="h3 mb-0">{{ latest.weight_kg|floatformat:1 }}<small class="fs-6"> kg</small></div></div></div></div>
+    <div class="col-6 col-md-3"><div class="card stat"><div class="card-body"><div class="small text-muted">Sleep</div><div class="h3 mb-0">{{ latest.sleep_hours }}<small class="fs-6"> h</small></div></div></div></div>
+    <div class="col-6 col-md-3"><div class="card stat"><div class="card-body"><div class="small text-muted">Assessments</div><div class="h3 mb-0">{{ total }}</div></div></div></div>
+    <div class="col-12"><div class="card"><div class="card-body small">
+      <strong>Latest assessment:</strong> {{ latest.created_at|date:"d M Y, H:i" }} &middot;
+      <a href="{% url 'health:detail' latest.pk %}">full details and recommendations</a>.<br>
+      Activity: {{ latest.physical_activity }} &middot; Smoking history: {{ latest.smoking }} &middot; General health: {{ latest.gen_health }}
+    </div></div></div>
+  </div></div>
+</div>
+
+<h2 class="h4">Top recommendations</h2>
+{% include "health/_recommendations.html" with recs=latest.recommendations|slice:":4" %}
+
+<h2 class="h4 mt-4">Recorded measurements over time</h2>
+{% if total > 1 %}
+<div class="row g-3">
+  <div class="col-lg-6"><div class="card"><div class="card-body"><canvas id="bmiChart" aria-label="BMI over time" role="img"></canvas></div></div></div>
+  <div class="col-lg-6"><div class="card"><div class="card-body"><canvas id="weightChart" aria-label="Weight over time" role="img"></canvas></div></div></div>
+</div>
+<p class="small text-muted mt-2">These charts show the measurements you entered. A change in the model result between assessments does <strong>not</strong> prove a change in your actual disease risk.</p>
+{{ chart|json_script:"chart-data" }}
+{% else %}<div class="alert alert-secondary">Complete at least two assessments to see charts of how your measurements change.</div>{% endif %}
+
+<h2 class="h4 mt-4">Previous assessments</h2>
+{% if recent %}
+<ul class="list-group">
+{% for a in recent %}<li class="list-group-item d-flex justify-content-between align-items-center">
+  <span>{{ a.created_at|date:"d M Y" }} &middot; BMI {{ a.bmi }} &middot; {{ a.get_risk_category_display }} pattern</span>
+  <a href="{% url 'health:detail' a.pk %}">View</a></li>{% endfor %}
+</ul>
+<a class="d-block mt-2" href="{% url 'health:history' %}">See full history</a>
+{% else %}<p class="text-muted">No earlier assessments.</p>{% endif %}
+{% endif %}
+{% endblock %}
+{% block scripts %}
+{% if total > 1 %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endif %}
+{% endblock %}

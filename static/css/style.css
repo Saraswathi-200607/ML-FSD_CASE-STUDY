@@ -1,0 +1,8 @@
+body { min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1 0 auto; }
+.card { border-radius: .75rem; }
+.stat .card-body { padding: .75rem 1rem; }
+.rec-high { border-left: 4px solid #dc3545; }
+.rec-medium { border-left: 4px solid #ffc107; }
+.rec-info { border-left: 4px solid #6c757d; }
+canvas { max-height: 280px; }

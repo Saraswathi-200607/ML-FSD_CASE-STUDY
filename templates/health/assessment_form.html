@@ -1,0 +1,69 @@
+{% extends "base.html" %}{% block title %}New assessment{% endblock %}
+{% block content %}
+<h1 class="h3 mb-1">Health assessment</h1>
+<p class="text-muted">Fields marked <span class="text-danger">*</span> are required by the prediction model.
+   The diet fields are optional and only used for lifestyle tips.</p>
+
+{% if setup_error %}
+<div class="alert alert-danger" role="alert"><strong>Setup problem:</strong> {{ setup_error }}</div>
+{% endif %}
+{% if form.non_field_errors %}<div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+{% if form.errors and not form.non_field_errors %}
+<div class="alert alert-danger" role="alert">Please correct the highlighted fields below.</div>{% endif %}
+
+<form method="post" novalidate data-loading-form>{% csrf_token %}
+  <div class="card shadow-sm mb-3"><div class="card-body">
+    <h2 class="h5">About you</h2>
+    <div class="row g-3">
+      {% with field=form.age %}{% include "health/_field.html" %}{% endwith %}
+      {% with field=form.sex %}{% include "health/_field.html" %}{% endwith %}
+      {% with field=form.height_cm %}{% include "health/_field.html" %}{% endwith %}
+      {% with field=form.weight_kg %}{% include "health/_field.html" %}{% endwith %}
+    </div>
+  </div></div>
+
+  <div class="card shadow-sm mb-3"><div class="card-body">
+    <h2 class="h5">Lifestyle</h2>
+    <div class="row g-3">
+      {% with field=form.smoking %}{% include "health/_field.html" %}{% endwith %}
+      {% with field=form.alcohol_drinking %}{% include "health/_field.html" %}{% endwith %}
+      {% with field=form.physical_activity %}{% include "health/_field.html" %}{% endwith %}
+      {% with field=form.sleep_hours %}{% include "health/_field.html" %}{% endwith %}
+    </div>
+  </div></div>
+
+  <div class="card shadow-sm mb-3"><div class="card-body">
+    <h2 class="h5">Medical history (self-reported)</h2>
+    <div class="row g-3">
+      {% with field=form.diabetic %}{% include "health/_field.html" %}{% endwith %}
+      {% with field=form.stroke %}{% include "health/_field.html" %}{% endwith %}
+      {% with field=form.kidney_disease %}{% include "health/_field.html" %}{% endwith %}
+      {% with field=form.asthma %}{% include "health/_field.html" %}{% endwith %}
+      {% with field=form.skin_cancer %}{% include "health/_field.html" %}{% endwith %}
+      {% with field=form.diff_walking %}{% include "health/_field.html" %}{% endwith %}
+    </div>
+  </div></div>
+
+  <div class="card shadow-sm mb-3"><div class="card-body">
+    <h2 class="h5">General well-being</h2>
+    <div class="row g-3">
+      {% with field=form.gen_health %}{% include "health/_field.html" %}{% endwith %}
+      {% with field=form.physical_health_days %}{% include "health/_field.html" %}{% endwith %}
+      {% with field=form.mental_health_days %}{% include "health/_field.html" %}{% endwith %}
+    </div>
+  </div></div>
+
+  <div class="card shadow-sm mb-3"><div class="card-body">
+    <h2 class="h5">Diet <span class="badge text-bg-secondary">optional</span></h2>
+    <div class="row g-3">
+      {% with field=form.fruit_veg_servings %}{% include "health/_field.html" %}{% endwith %}
+      {% with field=form.fried_food_frequency %}{% include "health/_field.html" %}{% endwith %}
+    </div>
+  </div></div>
+
+  <button class="btn btn-primary btn-lg" type="submit">
+    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+    <span class="btn-label">Calculate</span>
+  </button>
+</form>
+{% endblock %}

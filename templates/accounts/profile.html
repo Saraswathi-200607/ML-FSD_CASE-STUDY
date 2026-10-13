@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="row g-4">
+<div class="col-lg-6"><div class="card shadow-sm"><div class="card-body p-4">
+  <h1 class="h4">Your profile</h1>
+  <p class="text-muted small">All fields are optional. They are only used to pre-fill the assessment form (data minimisation).</p>
+  <form method="post" novalidate>{% csrf_token %}
+    {% for field in form %}
+    <div class="mb-3"><label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}{% for e in field.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>
+    {% endfor %}
+    <button class="btn btn-primary" type="submit">Save profile</button>
+  </form>
+</div></div></div>
+<div class="col-lg-6"><div class="card border-danger"><div class="card-body">
+  <h2 class="h5 text-danger">Delete my account and data</h2>
+  <p class="small">Permanently removes your account, profile and every saved assessment.</p>
+  <a class="btn btn-outline-danger" href="{% url 'accounts:delete' %}">Delete account&hellip;</a>
+</div></div></div>
+</div>
+{% endblock %}

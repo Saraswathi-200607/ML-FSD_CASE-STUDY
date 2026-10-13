@@ -1,0 +1,38 @@
+{% extends "base.html" %}{% block title %}Assessment result{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+  <h1 class="h3 mb-0">Assessment of {{ a.created_at|date:"d M Y, H:i" }}</h1>
+  <div><a class="btn btn-outline-primary btn-sm" href="{% url 'health:new' %}">New assessment</a>
+       <a class="btn btn-outline-danger btn-sm" href="{% url 'health:delete' a.pk %}">Delete</a></div>
+</div>
+<div class="row g-3 mb-4">
+  <div class="col-lg-5">{% include "health/_result_card.html" %}</div>
+  <div class="col-lg-7"><div class="card shadow-sm h-100"><div class="card-body">
+    <h2 class="h5">How to read this</h2>
+    <ul class="mb-0 small">
+      <li>The model learned from a <strong>US survey</strong> in which people self-reported whether they had heart disease. It finds <em>similarity to those reports</em>; it does not predict who will develop disease.</li>
+      <li>It has <strong>not been clinically validated</strong> and may be less accurate for people in India.</li>
+      <li>It cannot see blood pressure, cholesterol, family history or ECG results.</li>
+      <li>A &ldquo;lower&rdquo; result does not mean you are healthy, and an &ldquo;elevated&rdquo; one does not mean you are ill. Only a clinician can assess you.</li>
+    </ul>
+  </div></div></div>
+</div>
+
+<h2 class="h4">Recommendations</h2>
+<p class="text-muted small">General lifestyle education from a rule-based engine. Not medical advice.</p>
+{% include "health/_recommendations.html" with recs=a.recommendations %}
+
+<h2 class="h4 mt-4">Information you entered</h2>
+<div class="table-responsive"><table class="table table-sm table-striped bg-white">
+<tbody>
+<tr><th>Age</th><td>{{ a.age }} ({{ a.age_category }})</td><th>Sex</th><td>{{ a.sex }}</td></tr>
+<tr><th>Height / Weight</th><td>{{ a.height_cm|floatformat:0 }} cm / {{ a.weight_kg|floatformat:1 }} kg</td><th>BMI</th><td>{{ a.bmi }}</td></tr>
+<tr><th>Smoked 100+ cigarettes</th><td>{{ a.smoking }}</td><th>Heavy alcohol</th><td>{{ a.alcohol_drinking }}</td></tr>
+<tr><th>Physically active</th><td>{{ a.physical_activity }}</td><th>Sleep (hours)</th><td>{{ a.sleep_hours }}</td></tr>
+<tr><th>Diabetes</th><td>{{ a.diabetic }}</td><th>Stroke</th><td>{{ a.stroke }}</td></tr>
+<tr><th>Kidney disease</th><td>{{ a.kidney_disease }}</td><th>Asthma</th><td>{{ a.asthma }}</td></tr>
+<tr><th>Skin cancer</th><td>{{ a.skin_cancer }}</td><th>Difficulty walking</th><td>{{ a.diff_walking }}</td></tr>
+<tr><th>General health</th><td>{{ a.gen_health }}</td><th>Poor physical / mental days</th><td>{{ a.physical_health_days }} / {{ a.mental_health_days }}</td></tr>
+<tr><th>Fruit &amp; veg servings</th><td>{{ a.fruit_veg_servings|default_if_none:"not provided" }}</td><th>Fried food</th><td>{{ a.get_fried_food_frequency_display|default:"not provided" }}</td></tr>
+</tbody></table></div>
+{% endblock %}
