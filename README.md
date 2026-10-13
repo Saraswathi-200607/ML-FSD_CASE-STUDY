@@ -1,25 +1,25 @@
 # Personalized Disease Risk and Lifestyle Recommendation System
 
 A Django web application that compares a user's health and lifestyle answers with patterns in the public
-*Personal Key Indicators of Heart Disease* (CDC BRFSS 2020) dataset, and gives explained, rule-based lifestyle tips.
+_Personal Key Indicators of Heart Disease_ (CDC BRFSS 2020) dataset, and gives explained, rule-based lifestyle tips.
 
 > **Educational project. Not a medical device, not a diagnosis.** The model is trained on US survey data,
 > has not been clinically validated and may be less accurate for people in India (see `docs/VIVA.md`).
 
 ## What is inside
 
-| Path | Purpose |
-|---|---|
-| `ml/` | Offline ML: `inspect_dataset.py`, `train_model.py`, `evaluate_model.py`, shared feature schema `config.py`, `predict.py` (inference) |
-| `accounts/` | Registration, login/logout, profile, account deletion |
-| `health/` | Assessment form, assessment history, dashboard, database model `Assessment` |
-| `prediction/` | `services.py` (glue between Django and `ml/`), "About the model" page |
-| `recommendations/engine.py` | Rule-based, explained lifestyle recommendations (independent of the ML model) |
-| `templates/`, `static/` | Bootstrap 5 UI, Chart.js dashboard |
-| `config/` | Django settings (env-based), URLs, WSGI |
-| `data/` | Put the Kaggle CSV here (git-ignored) |
-| `model_artifacts/` | Trained `model.joblib` + `model_meta.json` are written here (git-ignored) |
-| `docs/` | Architecture, report outline, viva Q&A, deployment guide |
+| Path                        | Purpose                                                                                                                              |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ml/`                       | Offline ML: `inspect_dataset.py`, `train_model.py`, `evaluate_model.py`, shared feature schema `config.py`, `predict.py` (inference) |
+| `accounts/`                 | Registration, login/logout, profile, account deletion                                                                                |
+| `health/`                   | Assessment form, assessment history, dashboard, database model `Assessment`                                                          |
+| `prediction/`               | `services.py` (glue between Django and `ml/`), "About the model" page                                                                |
+| `recommendations/engine.py` | Rule-based, explained lifestyle recommendations (independent of the ML model)                                                        |
+| `templates/`, `static/`     | Bootstrap 5 UI, Chart.js dashboard                                                                                                   |
+| `config/`                   | Django settings (env-based), URLs, WSGI                                                                                              |
+| `data/`                     | Put the Kaggle CSV here (git-ignored)                                                                                                |
+| `model_artifacts/`          | Trained `model.joblib` + `model_meta.json` are written here (git-ignored)                                                            |
+| `docs/`                     | Architecture, report outline, viva Q&A, deployment guide                                                                             |
 
 ## 1. Setup (Windows PowerShell)
 
@@ -47,7 +47,7 @@ python -c "from django.core.management.utils import get_random_secret_key as g; 
 2. Extract and copy **`heart_2020_cleaned.csv`** into the `data\` folder.
 
 This project expects the 2020 file's columns (`HeartDisease, BMI, Smoking, ...`). The Kaggle page also has a
-newer 2022 file with *different* columns. The scripts stop with a clear message if the columns do not match.
+newer 2022 file with _different_ columns. The scripts stop with a clear message if the columns do not match.
 
 Inspect it first:
 
@@ -98,9 +98,9 @@ See `docs/DEPLOYMENT.md` (GitHub setup, Render, PostgreSQL, WhiteNoise, model ar
 
 ## Design decisions (short)
 
-* **One schema file** (`ml/config.py`) drives training, the form, validation and inference, so they cannot drift apart.
-* **Preprocessing lives inside the scikit-learn `Pipeline`**: fitted on training folds only, and the same transform is applied at inference.
-* **No percentage is shown.** The app shows a category (lower / borderline / elevated) and an *uncalibrated score*, because the score is not a validated personal risk.
-* **`Race` is deliberately not used** (US-specific, ethically problematic, irrelevant for India).
-* **Every health query is scoped to `request.user`**; other users' records return 404.
-* **Data minimisation and deletion**: profile fields are optional; users can delete assessments or their entire account.
+- **One schema file** (`ml/config.py`) drives training, the form, validation and inference, so they cannot drift apart.
+- **Preprocessing lives inside the scikit-learn `Pipeline`**: fitted on training folds only, and the same transform is applied at inference.
+- **No percentage is shown.** The app shows a category (lower / borderline / elevated) and an _uncalibrated score_, because the score is not a validated personal risk.
+- **`Race` is deliberately not used** (US-specific, ethically problematic, irrelevant for India).
+- **Every health query is scoped to `request.user`**; other users' records return 404.
+- **Data minimisation and deletion**: profile fields are optional; users can delete assessments or their entire account.
